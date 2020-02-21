@@ -101,7 +101,7 @@ public class Base {
             s += "P(" + map.get("t") + ") = " + Functions.Pv(k, a, t) + "\n";
             s += "f(" + map.get("t") + ") = " + Functions.Fv(k, a, t) + "\n";
             s += "l(" + map.get("t") + ") = " + Functions.Lv(k, a, t) + "\n";
-            s += "m_t = " + Functions.Mv(k,a) + "\n";
+            s += "m_t = " + Functions.Mv(k, a) + "\n";
         } else if (map.containsKey("t") && map.containsKey("a")) {
             double t = Double.parseDouble(map.get("t"));
             double a = Double.parseDouble(map.get("a"));
@@ -110,6 +110,34 @@ public class Base {
             s += "f(" + map.get("t") + ") = " + Functions.Fr(t, a) + "\n";
             s += "l(" + map.get("t") + ") = " + Functions.Lr(t, a) + "\n";
             s += "m_t = " + Functions.Mr(a) + "\n";
+        }
+
+        area.setText(s);
+    }
+
+    public void processFunctions3(JTextArea area) {
+        String s = "";
+        if (map.containsKey("m[]")) {
+            double[] m = Basic.toArray(map.get("m[]"));
+
+            double[] l = new double[m.length];
+            for (int i = 0; i < m.length; i++)
+                l[i] = ReservExp.L_i(m[i]);
+
+            s += "l_c = " + ReservExp.L(l) + "\n";
+            s += "m_tc = " + ReservExp.M(l) + "\n";
+        } else if (map.containsKey("l") && map.containsKey("n") && map.containsKey("t")) {
+            double l = Double.parseDouble(map.get("l"));
+            double n = Double.parseDouble(map.get("n"));
+            double t = Double.parseDouble(map.get("t"));
+
+            double lc = l * n;
+
+            s += "l_c = " + lc + "\n";
+            s += "P_c = " + ReservExp.P(lc, t) + "\n";
+            s += "q_c = " + ReservExp.Q(lc, t) + "\n";
+            s += "f_c = " + ReservExp.Q(lc, t) + "\n";
+            s += "m_c = " + ReservExp.M(lc) + "\n";
         }
 
         area.setText(s);

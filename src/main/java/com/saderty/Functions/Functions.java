@@ -82,8 +82,8 @@ public class Functions {
     }
 
     //V
-    static double Mv(double k,double a){
-        return (1/k*Applications.Vebyal(1/k))/(Math.pow(a,1/k));
+    static double Mv(double k, double a) {
+        return (1 / k * Applications.Vebyal(1 / k)) / (Math.pow(a, 1 / k));
     }
 
     //L
