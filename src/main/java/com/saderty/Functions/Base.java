@@ -117,8 +117,10 @@ public class Base {
 
     public void processFunctions3(JTextArea area) {
         String s = "";
-        if (map.containsKey("m[]")) {
-            double[] m = Basic.toArray(map.get("m[]"));
+        if (contains("l[]", "t")) {
+            s += toOut("p_c", Reserv.P_c(getArray(("l[]")), get("t")), get("t"));
+        } else if (map.containsKey("m[]")) {
+            double[] m = toArray(map.get("m[]"));
 
             double[] l = new double[m.length];
             for (int i = 0; i < m.length; i++)
@@ -136,10 +138,119 @@ public class Base {
             s += "l_c = " + lc + "\n";
             s += "P_c = " + ReservExp.P(lc, t) + "\n";
             s += "q_c = " + ReservExp.Q(lc, t) + "\n";
-            s += "f_c = " + ReservExp.Q(lc, t) + "\n";
+            s += "f_c = " + ReservExp.F(lc, t) + "\n";
             s += "m_c = " + ReservExp.M(lc) + "\n";
+        } else if (contains("t", "p[]")) {
+            double t = get("t");
+            double[] p = getArray("p[]");
+
+            double p_c = Basic.mult(p);
+            double l_c = -Math.log(p_c) / t;
+            double m_tc = ReservExp.M(l_c);
+
+            s += toOut("p_c", p_c, t);
+            s += toOut("l_c", l_c);
+            s += toOut("m_tc", m_tc);
+        } else if (contains("p", "n")) {
+            double p = get("p");
+            double n = get("n");
+            s += toOut("q", 1 - p);
+            s += toOut("p_c", ReservOne.P_c(n, 1 - p));
+        } else if (contains("p_c", "n")) {
+            s += toOut("p_i", ReservOne.P_i(get("n"), 1 - get("p_c")));
         }
 
         area.setText(s);
+    }
+
+    public void processFunctions4(JTextArea area) {
+        String s = "";
+        if (contains("n", "m_i", "t", "m")) {
+            double n = get("n");
+            double m_i = get("m_i");
+            double t = get("t");
+            double m = get("m");
+
+            double l = 1 / m_i * n;
+            double m_c = ReservHotExp.M(l, m);
+            double p_c = ReservHotExp.P(l, t, m);
+            double f_c = ReservHotExp.F(l, t, m);
+            double l_c = ReservHotExp.L(l, t, m);
+            s += toOut("m_c", m_c);
+            s += toOut("p_c", p_c);
+            s += toOut("f_c", f_c);
+            s += toOut("l_c", l_c);
+        } else if (contains("n", "m_i", "t")) {
+            double n = get("n");
+            double m_i = get("m_i");
+            double t = get("t");
+
+            double l_c = 1 / m_i * n;
+            double m_c = 1 / l_c;
+            double p_c = ReservHotExp.P(l_c, t);
+            double f_c = l_c * p_c;
+            s += toOut("l_c", l_c);
+            s += toOut("m_c", m_c);
+            s += toOut("p_c", p_c);
+            s += toOut("f_c", f_c);
+        } else if (contains("l", "t", "m")) {
+            double l = get("l");
+            double t = get("t");
+            double m = get("m");
+
+            double m_c = ReservHotExp.M(l, m);
+            double p_c = ReservHotExp.P(l, t, m);
+            double f_c = ReservHotExp.F(l, t, m);
+            double l_c = ReservHotExp.L(l, t, m);
+            s += toOut("m_c", m_c);
+            s += toOut("p_c", p_c);
+            s += toOut("f_c", f_c);
+            s += toOut("l_c", l_c);
+        } else if (contains("l", "t")) {
+            double l = get("l");
+            double t = get("t");
+
+            double m_c = 1 / l;
+            double p_c = ReservHotExp.P(l, t);
+            double f_c = l * p_c;
+            s += toOut("m_c", m_c);
+            s += toOut("p_c", p_c);
+            s += toOut("f_c", f_c);
+        }
+        area.setText(s);
+    }
+
+    boolean contains(String... strings) {
+        for (String string : strings)
+            if (!map.containsKey(string)) return false;
+        return true;
+    }
+
+    double get(String s) {
+        return Double.parseDouble(map.get(s));
+    }
+
+    double[] getArray(String s) {
+        return toArray(map.get(s));
+    }
+
+    public static String trimBorders(String s) {
+        return s.substring(1, s.length() - 1);
+    }
+
+    public static double[] toArray(String s) {
+        String[] strings = s.split(",");
+        double[] doubles = new double[strings.length];
+        for (int i = 0; i < strings.length; i++)
+            doubles[i] = Double.parseDouble(strings[i]);
+        return doubles;
+    }
+
+    String toOut(String s, double s1) {
+        return s + " = " + s1 + "\n";
+    }
+
+    String toOut(String s, double s1, double t) {
+        return s + "(" + t + ") = " + s1 + "\n";
     }
 }

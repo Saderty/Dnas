@@ -34,11 +34,9 @@ public class Dnas extends JFrame {
         button1.setText("Рассчитать");
         add(button1);
 
-        button1.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                Base base = new Base(textArea);
-                base.processFunctions2(textArea1);
-            }
+        button1.addActionListener(e -> {
+            Base base = new Base(textArea);
+            base.processFunctions4(textArea1);
         });
 
         setVisible(true);
