@@ -216,6 +216,41 @@ public class Base {
             s += toOut("m_c", m_c);
             s += toOut("p_c", p_c);
             s += toOut("f_c", f_c);
+        } else if (contains("l0", "l1", "m", "t")) {
+            double l0 = get("l0");
+            double l1 = get("l1");
+            double m = get("m");
+            double t = get("t");
+            s += toOut("P", ReservNotHot.P(l0, l1, t, m));
+            s += toOut("q", ReservNotHot.Q(l0, l1, t, m));
+            s += toOut("m", ReservNotHot.M(l0, l1, m));
+            s += toOut("f", ReservNotHot.F(l0, l1, t, m));
+            s += toOut("l", ReservNotHot.L(l0, l1, t, m));
+        } else if (contains("l0", "m", "t")) {
+            double l0 = get("l0");
+            double m = get("m");
+            double t = get("t");
+            s += toOut("P", ReservNotHot.P(l0, t, m));
+            s += toOut("q", ReservNotHot.Q(l0, t, m));
+            s += toOut("m", ReservNotHot.M(l0, m));
+            s += toOut("f", ReservNotHot.F(l0, t, m));
+            s += toOut("l", ReservNotHot.L(l0, t, m));
+        } else if (contains("n", "m", "t")) {
+            double n = get("n");
+            double m_t = get("m");
+            double l0 = n / m_t;
+            double t = get("t");
+            s += toOut("P", ReservNotHot.P(l0, t, 0));
+            s += toOut("q", ReservNotHot.Q(l0, t, 0));
+            s += toOut("m", ReservNotHot.M(l0, 0));
+            s += toOut("f", ReservNotHot.F(l0, t, 0));
+            s += toOut("l", ReservNotHot.L(l0, t, 0));
+            s += "\n";
+            s += toOut("P", ReservNotHot.P(l0, t, 1));
+            s += toOut("q", ReservNotHot.Q(l0, t, 1));
+            s += toOut("m", ReservNotHot.M(l0, 1));
+            s += toOut("f", ReservNotHot.F(l0, t, 1));
+            s += toOut("l", ReservNotHot.L(l0, t, 1));
         }
         area.setText(s);
     }
