@@ -10,7 +10,7 @@ public class Base {
     public Base(JTextArea area) {
         String[] numLines = area.getText().split("\n");
         for (String numLine : numLines) {
-            String[] tmp = numLine.split("=");
+            String[] tmp = numLine.replaceAll(" ", "").split("=");
             if (tmp[0].contains("("))
                 times.add(Integer.valueOf(tmp[0].substring(tmp[0].indexOf("(") + 1, tmp[0].indexOf(")"))));
             map.put(tmp[0], tmp[1]);
