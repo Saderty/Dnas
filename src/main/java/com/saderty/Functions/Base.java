@@ -288,4 +288,42 @@ public class Base {
     String toOut(String s, double s1, double t) {
         return s + "(" + t + ") = " + s1 + "\n";
     }
+
+    public static String getVarHelp(String... strings) {
+        StringBuilder s = new StringBuilder();
+        for (String string : strings) {
+            s.append(string).append(" : ").append(getVar(string)).append("\n");
+        }
+        return s.toString();
+    }
+
+    static String getVar(String s) {
+        switch (s) {
+            case "P":
+                return "Вероятность безотказной работы";
+            case "N":
+                return "Число изделий";
+            case "n(t)":
+                return "Число отказавших изделий";
+            case "q":
+                return "Вероятность отказа";
+            case "l":
+                return "Интенсивность отказов";
+            case "f":
+                return "Частота отказов";
+            case "m":
+                return "Среднее время безотказной работы";
+            case "U":
+                return "";
+            case "t":
+                return "Время";
+            case "\u03bb":
+                return "Интенсивность отказов";
+            case "a":
+                return "Распределение случайной величины";
+            case "k":
+                return "Коэффициент распределения случайной величины";
+        }
+        return null;
+    }
 }

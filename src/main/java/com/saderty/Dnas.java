@@ -3,14 +3,13 @@ package com.saderty;
 import com.saderty.Functions.Base;
 
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+
+import static com.saderty.Functions.Base.getVarHelp;
 
 public class Dnas extends JFrame {
     Dnas() {
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
         setTitle("ДНАС");
         getContentPane().setBackground(new Color(150, 150, 255));
         setSize(1000, 1000);
@@ -51,6 +50,12 @@ public class Dnas extends JFrame {
         textArea1.setFont(new Font(f.getFontName(), f.getStyle(), f.getSize() + 2));
         add(textArea1);
 
+        JTextArea textArea2 = new JTextArea();
+        textArea2.setBounds(720, 10, 500, 490);
+        textArea2.setBackground(new Color(255, 255, 200));
+        textArea2.setFont(new Font(f.getFontName(), f.getStyle(), f.getSize() + 2));
+        add(textArea2);
+
         JButton button1 = new JButton();
         button1.setBounds(410, 510, 300, 100);
         button1.setFont(new Font(f.getFontName(), f.getStyle(), f.getSize() + 2));
@@ -59,7 +64,6 @@ public class Dnas extends JFrame {
 
         button1.addActionListener(e -> {
             Base base = new Base(textArea);
-            //base.processFunctions4(textArea1);
             if (checkBox1.isSelected()) base.processFunctions1(textArea1);
             if (checkBox2.isSelected()) base.processFunctions2(textArea1);
             if (checkBox3.isSelected()) base.processFunctions3(textArea1);
@@ -72,6 +76,7 @@ public class Dnas extends JFrame {
             checkBox4.setSelected(false);
             checkBox5.setSelected(false);
             textArea.setText("N=\nn()=\nt=\nt[]=");
+            textArea2.setText(getVarHelp("N", "n(t)", "P", "q", "m", "f", "\u03bb"));
         });
         checkBox2.addActionListener(actionEvent -> {
             checkBox1.setSelected(false);
@@ -79,6 +84,7 @@ public class Dnas extends JFrame {
             checkBox4.setSelected(false);
             checkBox5.setSelected(false);
             textArea.setText("l=\nt=\nm=\na=\nk=");
+            textArea2.setText(getVarHelp("P", "q", "\u03bb", "f", "m", "N", "t", "a", "k"));
         });
         checkBox3.addActionListener(actionEvent -> {
             checkBox2.setSelected(false);
@@ -86,6 +92,7 @@ public class Dnas extends JFrame {
             checkBox4.setSelected(false);
             checkBox5.setSelected(false);
             textArea.setText("l=\nl[]=\nn=\nt=\np=\np[]=\np_c");
+            textArea2.setText(getVarHelp("P", "q", "\u03bb", "f", "m", "N", "t"));
         });
         checkBox4.addActionListener(actionEvent -> {
             checkBox2.setSelected(false);
@@ -93,6 +100,7 @@ public class Dnas extends JFrame {
             checkBox1.setSelected(false);
             checkBox5.setSelected(false);
             textArea.setText("n=\nm=\nm_i\nt=\nl=\nl0=\nl1=");
+            textArea2.setText(getVarHelp("P", "q", "\u03bb", "f", "m", "N", "t"));
         });
         checkBox5.addActionListener(actionEvent -> {
             checkBox2.setSelected(false);
@@ -100,6 +108,7 @@ public class Dnas extends JFrame {
             checkBox4.setSelected(false);
             checkBox1.setSelected(false);
             textArea.setText("n=\nm=\nm_i\nt=\nl=\nl0=\nl1=");
+            textArea2.setText(getVarHelp("P", "q", "\u03bb", "f", "m", "N", "t"));
         });
 
         setVisible(true);
