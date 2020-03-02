@@ -3,6 +3,9 @@ package com.saderty.Functions;
 import javax.swing.*;
 import java.util.*;
 
+import static com.saderty.Dnas.lambda;
+import static com.saderty.Dnas.sigma;
+
 public class Base {
     private Map<String, String> map = new HashMap<>();
     private List<Integer> times = new LinkedList<>();
@@ -12,7 +15,9 @@ public class Base {
         for (String numLine : numLines) {
             String[] tmp = numLine.replaceAll(" ", "").split("=");
             if (tmp[0].contains("("))
-                times.add(Integer.valueOf(tmp[0].substring(tmp[0].indexOf("(") + 1, tmp[0].indexOf(")"))));
+                if (!tmp[0].substring(tmp[0].indexOf("(") + 1, tmp[0].indexOf(")")).equals("t"))
+                    times.add(Integer.valueOf(tmp[0].substring(tmp[0].indexOf("(") + 1, tmp[0].indexOf(")"))));
+            if (tmp.length == 1) continue;
             map.put(tmp[0], tmp[1]);
         }
     }
@@ -20,37 +25,26 @@ public class Base {
     public void processFunctions1(JTextArea area) {
         StringBuilder s = new StringBuilder();
         for (int time : times) {
-            if (map.containsKey("N") && map.containsKey("n(" + time + ")")) {
-                s.append("P'(").append(time).append(") = ")
-                        .append(Functions.Ps(Double.parseDouble(map.get("N")),
-                                Double.parseDouble(map.get("n(" + time + ")"))))
-                        .append("\n");
-                s.append("q'(").append(time).append(") = ")
-                        .append(Functions.Qs(Double.parseDouble(map.get("N")),
-                                Double.parseDouble(map.get("n(" + time + ")"))))
-                        .append("\n");
+            if (contains("N", "n(" + time + ")")) {
+                double n = get("N");
+                double nt = get("n(" + time + ")");
+                s.append(toOut("P(t)", Functions.Ps(n, nt)));
+                s.append(toOut("q(t)", Functions.Qs(n, nt)));
             }
         }
-        s.append("\n");
         if (times.size() == 2) {
-            double n = Double.parseDouble(map.get("N"));
-            double nt1 = Double.parseDouble(map.get("n(" + times.get(1) + ")"));
-            double nt0 = Double.parseDouble(map.get("n(" + times.get(0) + ")"));
+            double n = get("N");
+            double nt1 = get("n(" + times.get(1) + ")");
+            double nt0 = get("n(" + times.get(0) + ")");
             double ns = n - (nt0 + nt1) / 2;
-            s.append("f'(").append(times.get(0)).append(") = ")
-                    .append(Functions.Fs((int) (nt1 - nt0), n, times.get(1) - times.get(0)))
-                    .append("\n");
-            s.append("\u03bb'(").append(times.get(0)).append(") = ")
-                    .append(Functions.Fs((int) (nt1 - nt0), ns, times.get(1) - times.get(0)))
-                    .append("\n");
+            s.append(toOut("f(" + times.get(0) + ")", Functions.Fs((int) (nt1 - nt0), n, times.get(1) - times.get(0))));
+            s.append(toOut(lambda + "(" + times.get(0) + ")", Functions.Fs((int) (nt1 - nt0), ns, times.get(1) - times.get(0))));
         }
-
-        if (map.containsKey("t[]")) {
+        if (contains("t[]")) {
             String[] ts = map.get("t[]").split(",");
             s.append("m' = ").append(Functions.Ms(ts)).append("\n");
         }
-
-        if (map.containsKey("nt[]") && map.containsKey("t")) {
+        if (contains("nt[]", "t")) {
             String[] ts = map.get("nt[]").split(",");
             double t = Double.parseDouble(map.get("t"));
             double interval = t / ts.length / 2;
@@ -67,79 +61,77 @@ public class Base {
 
             sum /= n;
 
-            s.append("m' = ").append(sum).append("\n");
+            s.append(toOut("m", sum));
         }
 
         area.setText(s.toString());
     }
 
     public void processFunctions2(JTextArea area) {
-        String s = "";
+        StringBuilder s = new StringBuilder();
 
-        if (map.containsKey("l") && map.containsKey("t")) {
-            double t = Double.parseDouble(map.get("t"));
-            double l = Double.parseDouble(map.get("l"));
+        if (contains("l", "t")) {
+            double t = get("t");
+            double l = get("l");
 
-            s += "P(" + map.get("t") + ") = " + Functions.P(t, l) + "\n";
-            s += "q(" + map.get("t") + ") = " + Functions.Q(t, l) + "\n";
-            s += "f(" + map.get("t") + ") = " + Functions.F(t, l) + "\n";
-            s += "m_t = " + Functions.M(l) + "\n";
-        } else if (map.containsKey("m") && map.containsKey("a") && map.containsKey("t")) {
-            double m = Double.parseDouble(map.get("m"));
-            double a = Double.parseDouble(map.get("a"));
-            double t = Double.parseDouble(map.get("t"));
+            s.append(toOut("P(t)", Functions.P(t, l)));
+            s.append(toOut("q(t)", Functions.Q(t, l)));
+            s.append(toOut("f(t)", Functions.F(t, l)));
+            s.append(toOut("m(t)", Functions.M(l)));
+        } else if (contains("m", "a", "t")) {
+            double m = get("m");
+            double a = get("a");
+            double t = get("t");
 
-            s += "U = " + Functions.Ul(t, m, a) + "\n";
-            s += "P(" + map.get("t") + ") = " + Functions.Pl(t, m, a) + "\n";
-            s += "f(" + map.get("t") + ") = " + Functions.Fl(t, m, a) + "\n";
-            s += "l(" + map.get("t") + ") = " + Functions.Ll(t, m, a) + "\n";
-        } else if (map.containsKey("k") && map.containsKey("a") && map.containsKey("t")) {
-            double k = Double.parseDouble(map.get("k"));
-            double a = Double.parseDouble(map.get("a"));
-            double t = Double.parseDouble(map.get("t"));
+            s.append(toOut("P(t)", Functions.Pl(t, m, a)));
+            s.append(toOut("f(t)", Functions.Fl(t, m, a)));
+            s.append(toOut("l(t)", Functions.Ll(t, m, a)));
+        } else if (contains("k", "a", "t")) {
+            double k = get("k");
+            double a = get("a");
+            double t = get("t");
 
-            s += "P(" + map.get("t") + ") = " + Functions.Pv(k, a, t) + "\n";
-            s += "f(" + map.get("t") + ") = " + Functions.Fv(k, a, t) + "\n";
-            s += "l(" + map.get("t") + ") = " + Functions.Lv(k, a, t) + "\n";
-            s += "m_t = " + Functions.Mv(k, a) + "\n";
-        } else if (map.containsKey("t") && map.containsKey("a")) {
-            double t = Double.parseDouble(map.get("t"));
-            double a = Double.parseDouble(map.get("a"));
+            s.append(toOut("P(t)", Functions.Pv(k, a, t)));
+            s.append(toOut("f(t)", Functions.Fv(k, a, t)));
+            s.append(toOut("l(t)", Functions.Lv(k, a, t)));
+            s.append(toOut("m(t)", Functions.Mv(k, a)));
+        } else if (contains("t", "a")) {
+            double t = get("t");
+            double a = get("a");
 
-            s += "P(" + map.get("t") + ") = " + Functions.Pr(t, a) + "\n";
-            s += "f(" + map.get("t") + ") = " + Functions.Fr(t, a) + "\n";
-            s += "l(" + map.get("t") + ") = " + Functions.Lr(t, a) + "\n";
-            s += "m_t = " + Functions.Mr(a) + "\n";
+            s.append(toOut("P(t)", Functions.Pr(t, a)));
+            s.append(toOut("f(t)", Functions.Fr(t, a)));
+            s.append(toOut("l(t)", Functions.Lr(t, a)));
+            s.append(toOut("m(t)", Functions.Mr(a)));
         }
 
-        area.setText(s);
+        area.setText(s.toString());
     }
 
     public void processFunctions3(JTextArea area) {
-        String s = "";
+        StringBuilder s = new StringBuilder();
         if (contains("l[]", "t")) {
-            s += toOut("p_c", Reserv.P_c(getArray(("l[]")), get("t")), get("t"));
-        } else if (map.containsKey("m[]")) {
+            s.append(toOut("p_c", Reserv.P_c(getArray(("l[]")), get("t"))));
+        } else if (contains("m[]")) {
             double[] m = toArray(map.get("m[]"));
-
             double[] l = new double[m.length];
             for (int i = 0; i < m.length; i++)
                 l[i] = ReservExp.L_i(m[i]);
 
-            s += "l_c = " + ReservExp.L(l) + "\n";
-            s += "m_tc = " + ReservExp.M(l) + "\n";
-        } else if (map.containsKey("l") && map.containsKey("n") && map.containsKey("t")) {
-            double l = Double.parseDouble(map.get("l"));
-            double n = Double.parseDouble(map.get("n"));
-            double t = Double.parseDouble(map.get("t"));
+            s.append(toOut("l(t)", ReservExp.L(l)));
+            s.append(toOut("m(t)", ReservExp.M(l)));
+        } else if (contains("l", "n", "t")) {
+            double l = get("l");
+            double n = get("n");
+            double t = get("t");
 
             double lc = l * n;
 
-            s += "l_c = " + lc + "\n";
-            s += "P_c = " + ReservExp.P(lc, t) + "\n";
-            s += "q_c = " + ReservExp.Q(lc, t) + "\n";
-            s += "f_c = " + ReservExp.F(lc, t) + "\n";
-            s += "m_c = " + ReservExp.M(lc) + "\n";
+            s.append(toOut("l(t)", lc));
+            s.append(toOut("P(t)", ReservExp.P(lc, t)));
+            s.append(toOut("P(t)", ReservExp.Q(lc, t)));
+            s.append(toOut("P(t)", ReservExp.F(lc, t)));
+            s.append(toOut("P(t)", ReservExp.M(lc)));
         } else if (contains("t", "p[]")) {
             double t = get("t");
             double[] p = getArray("p[]");
@@ -148,19 +140,18 @@ public class Base {
             double l_c = -Math.log(p_c) / t;
             double m_tc = ReservExp.M(l_c);
 
-            s += toOut("p_c", p_c, t);
-            s += toOut("l_c", l_c);
-            s += toOut("m_tc", m_tc);
+            s.append(toOut("p_c", p_c));
+            s.append(toOut("l_c", l_c));
+            s.append(toOut("m_tc", m_tc));
         } else if (contains("p", "n")) {
             double p = get("p");
             double n = get("n");
-            s += toOut("q", 1 - p);
-            s += toOut("p_c", ReservOne.P_c(n, 1 - p));
+            s.append(toOut("q", 1 - p));
+            s.append(toOut("p_c", ReservOne.P_c(n, 1 - p)));
         } else if (contains("p_c", "n")) {
-            s += toOut("p_i", ReservOne.P_i(get("n"), 1 - get("p_c")));
+            s.append(toOut("p_i", ReservOne.P_i(get("n"), 1 - get("p_c"))));
         }
-
-        area.setText(s);
+        area.setText(s.toString());
     }
 
     public void processFunctions4(JTextArea area) {
@@ -269,10 +260,6 @@ public class Base {
         return toArray(map.get(s));
     }
 
-    public static String trimBorders(String s) {
-        return s.substring(1, s.length() - 1);
-    }
-
     public static double[] toArray(String s) {
         String[] strings = s.split(",");
         double[] doubles = new double[strings.length];
@@ -282,11 +269,8 @@ public class Base {
     }
 
     String toOut(String s, double s1) {
+        if (s.contains("(")) return s.replaceAll("t", map.get("t")) + " = " + s1 + "\n";
         return s + " = " + s1 + "\n";
-    }
-
-    String toOut(String s, double s1, double t) {
-        return s + "(" + t + ") = " + s1 + "\n";
     }
 
     public static String getVarHelp(String... strings) {
@@ -299,30 +283,28 @@ public class Base {
 
     static String getVar(String s) {
         switch (s) {
-            case "P":
+            case "P(t)":
                 return "Вероятность безотказной работы";
             case "N":
                 return "Число изделий";
             case "n(t)":
                 return "Число отказавших изделий";
-            case "q":
+            case "q(t)":
                 return "Вероятность отказа";
-            case "l":
-                return "Интенсивность отказов";
-            case "f":
+            case "f(t)":
                 return "Частота отказов";
-            case "m":
+            case "m(t)":
                 return "Среднее время безотказной работы";
-            case "U":
-                return "";
             case "t":
                 return "Время";
-            case "\u03bb":
+            case lambda+"(t)":
                 return "Интенсивность отказов";
             case "a":
-                return "Распределение случайной величины";
+                return "Распределение Вейбулла";
             case "k":
-                return "Коэффициент распределения случайной величины";
+                return "Коэффициент распределения Вейбулла";
+            case sigma:
+                return "Распределение Рэлея";
         }
         return null;
     }

@@ -8,6 +8,9 @@ import java.awt.*;
 import static com.saderty.Functions.Base.getVarHelp;
 
 public class Dnas extends JFrame {
+    public static final String lambda = "\u03bb";
+    public static final String sigma = "\uD835\uDED4";
+
     Dnas() {
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setTitle("ДНАС");
@@ -75,40 +78,40 @@ public class Dnas extends JFrame {
             checkBox3.setSelected(false);
             checkBox4.setSelected(false);
             checkBox5.setSelected(false);
-            textArea.setText("N=\nn()=\nt=\nt[]=");
-            textArea2.setText(getVarHelp("N", "n(t)", "P", "q", "m", "f", "\u03bb"));
+            textArea.setText("N=\nn(t)=\nt=\nt[]=");
+            textArea2.setText(getVarHelp("N", "n(t)", "P(t)", "q(t)", "m(t)", "f(t)", lambda + "(t)"));
         });
         checkBox2.addActionListener(actionEvent -> {
             checkBox1.setSelected(false);
             checkBox3.setSelected(false);
             checkBox4.setSelected(false);
             checkBox5.setSelected(false);
-            textArea.setText("l=\nt=\nm=\na=\nk=");
-            textArea2.setText(getVarHelp("P", "q", "\u03bb", "f", "m", "N", "t", "a", "k"));
+            textArea.setText(lambda + "=\nt=\nm(t)=\n" + sigma + "=\nk=\na=");
+            textArea2.setText(getVarHelp("P(t)", "q(t)", lambda + "(t)", sigma, "f(t)", "m(t)", "N", "t", "a", "k"));
         });
         checkBox3.addActionListener(actionEvent -> {
             checkBox2.setSelected(false);
             checkBox1.setSelected(false);
             checkBox4.setSelected(false);
             checkBox5.setSelected(false);
-            textArea.setText("l=\nl[]=\nn=\nt=\np=\np[]=\np_c");
-            textArea2.setText(getVarHelp("P", "q", "\u03bb", "f", "m", "N", "t"));
+            textArea.setText(lambda + "=\nl[]=\nN=\nt=\nm(t)[]=\np(t)[]=\np(t)=");
+            textArea2.setText(getVarHelp("P(t)", "q(t)", lambda + "(t)", "f(t)", "m(t)", "N", "t"));
         });
         checkBox4.addActionListener(actionEvent -> {
             checkBox2.setSelected(false);
             checkBox3.setSelected(false);
             checkBox1.setSelected(false);
             checkBox5.setSelected(false);
-            textArea.setText("n=\nm=\nm_i\nt=\nl=\nl0=\nl1=");
-            textArea2.setText(getVarHelp("P", "q", "\u03bb", "f", "m", "N", "t"));
+            textArea.setText("N=\nm=\nm(t)=\nt=\n" + lambda + "(t)=");
+            textArea2.setText(getVarHelp("P(t)", "q(t)", lambda + "(t)", "f(t)", "m(t)", "N", "t"));
         });
         checkBox5.addActionListener(actionEvent -> {
             checkBox2.setSelected(false);
             checkBox3.setSelected(false);
             checkBox4.setSelected(false);
             checkBox1.setSelected(false);
-            textArea.setText("n=\nm=\nm_i\nt=\nl=\nl0=\nl1=");
-            textArea2.setText(getVarHelp("P", "q", "\u03bb", "f", "m", "N", "t"));
+            textArea.setText("N=\nm=\nm(t)=\nt=\nl0=\nl1=");
+            textArea2.setText(getVarHelp("P(t)", "q(t)", lambda + "(t)", "f(t)", "m(t)", "N", "t"));
         });
 
         setVisible(true);
