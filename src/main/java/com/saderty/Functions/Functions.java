@@ -105,7 +105,4 @@ public class Functions {
     static double Lv(double k, double a, double t) {
         return a * k * Math.pow(t, k - 1);
     }
-
-    public static void main(String[] args) {
-    }
 }

@@ -43,7 +43,4 @@ public class Applications {
         if (z >= 0) return ans;
         else return -ans;
     }
-
-    public static void main(String[] args) {
-    }
 }
