@@ -71,22 +71,23 @@ public class Dnas extends JFrame {
             if (checkBox2.isSelected()) base.processFunctions2(textArea1);
             if (checkBox3.isSelected()) base.processFunctions3(textArea1);
             if (checkBox4.isSelected()) base.processFunctions4(textArea1);
-            if (checkBox5.isSelected()) base.processFunctions4(textArea1);
+            if (checkBox5.isSelected()) base.processFunctions5(textArea1);
         });
         checkBox1.addActionListener(actionEvent -> {
             checkBox2.setSelected(false);
             checkBox3.setSelected(false);
             checkBox4.setSelected(false);
             checkBox5.setSelected(false);
-            textArea.setText("N=\nn(t)=\nt=\nt[]=");
-            textArea2.setText(getVarHelp("N", "n(t)", "P(t)", "q(t)", "m(t)", "f(t)", lambda + "(t)"));
+            textArea.setText("N=\nn(t)=\nn(t)[]=\nt=\nt[]=");
+            textArea2.setText(getVarHelp("N", "n(t)", "P(t)", "q(t)", "m(t)", "f(t)", lambda + "(t)") +
+                    "\n\n\n\nВводить время в скобки вместо t, при вводе n(t)");
         });
         checkBox2.addActionListener(actionEvent -> {
             checkBox1.setSelected(false);
             checkBox3.setSelected(false);
             checkBox4.setSelected(false);
             checkBox5.setSelected(false);
-            textArea.setText(lambda + "=\nt=\nm(t)=\n" + sigma + "=\nk=\na=");
+            textArea.setText(lambda + "=\nt=\nm=\n" + sigma + "=\nk=\na=");
             textArea2.setText(getVarHelp("P(t)", "q(t)", lambda + "(t)", sigma, "f(t)", "m(t)", "N", "t", "a", "k"));
         });
         checkBox3.addActionListener(actionEvent -> {
@@ -94,7 +95,7 @@ public class Dnas extends JFrame {
             checkBox1.setSelected(false);
             checkBox4.setSelected(false);
             checkBox5.setSelected(false);
-            textArea.setText(lambda + "=\nl[]=\nN=\nt=\nm(t)[]=\np(t)[]=\np(t)=");
+            textArea.setText(lambda + "=\n" + lambda + "[]=\nN=\nt=\nm(t)[]=\nP(t)[]=\nP(t)=\nP_c(t)=");
             textArea2.setText(getVarHelp("P(t)", "q(t)", lambda + "(t)", "f(t)", "m(t)", "N", "t"));
         });
         checkBox4.addActionListener(actionEvent -> {
@@ -102,7 +103,7 @@ public class Dnas extends JFrame {
             checkBox3.setSelected(false);
             checkBox1.setSelected(false);
             checkBox5.setSelected(false);
-            textArea.setText("N=\nm=\nm(t)=\nt=\n" + lambda + "(t)=");
+            textArea.setText("N=\nm=\nm(t)=\nt=\n" + lambda + "=");
             textArea2.setText(getVarHelp("P(t)", "q(t)", lambda + "(t)", "f(t)", "m(t)", "N", "t"));
         });
         checkBox5.addActionListener(actionEvent -> {

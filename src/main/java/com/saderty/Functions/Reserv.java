@@ -6,7 +6,7 @@ public class Reserv {
         for (double v : l) {
             d += v * t;
         }
-        return Math.exp(d);
+        return Math.exp(-d);
     }
     public static double P_c(double[] nums) {
         return Basic.mult(nums);
